@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController @RequestMapping("carros")
 public class CarroController {
+    @Autowired
     private final CarroRepository carroRepository;
 
     public CarroController(CarroRepository carroRepository) {
@@ -26,7 +27,7 @@ public class CarroController {
         carroRepository.save(carro);
         return ResponseEntity.status(201).body(carro);
     }
-    @GetMapping
+    @GetMapping("/todos")
     public ResponseEntity<List<CarroEntity>> getCarros(){
         List<CarroEntity> carros = carroRepository.findAll();
         if (carros.isEmpty())
@@ -39,5 +40,18 @@ public class CarroController {
         if (carro == null)
             return ResponseEntity.status(404).build();
         return ResponseEntity.status(200).body(carro);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CarroEntity>> getCarroByFabricante(
+            @RequestParam(required = false) String fabricante
+    ) {
+
+        List<CarroEntity> carros =
+                fabricante == null ? carroRepository.findAll() :
+        carroRepository.findByFabricanteNome(fabricante);
+        if (carros.isEmpty())
+            return ResponseEntity.status(404).build();
+        return ResponseEntity.status(200).body(carros);
     }
 }

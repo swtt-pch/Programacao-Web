@@ -1,24 +1,19 @@
 package sptech.demo.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "carro")
 public class CarroEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @NotNull @Min(2) @Max(12)
+    private Integer idCarro;
+    @NotNull @Size(min = 2, max = 12)
     private String modelo;
-    @NotNull @Min(2) @Max(10)
-    private String fabricante;
+    @ManyToOne @JoinColumn(name = "fkFabricante")
+    private FabricanteEntity fabricante;
     @PastOrPresent
     private LocalDate dataFabricacao;
     @NotNull @Min(1960) @Max(2021)
@@ -26,8 +21,8 @@ public class CarroEntity {
     @NotNull @DecimalMin("0.2") @DecimalMax("7.0")
     private double potenciaMotor;
 
-    public Integer getId() {
-        return id;
+    public Integer getIdCarro() {
+        return idCarro;
     }
 
     public String getModelo() {
@@ -38,11 +33,11 @@ public class CarroEntity {
         this.modelo = modelo;
     }
 
-    public String getFabricante() {
+    public FabricanteEntity getFabricante() {
         return fabricante;
     }
 
-    public void setFabricante(String fabricante) {
+    public void setFabricante(FabricanteEntity fabricante) {
         this.fabricante = fabricante;
     }
 
@@ -73,7 +68,7 @@ public class CarroEntity {
     @Override
     public String toString() {
         return "CarroEntity{" +
-                "id=" + id +
+                "id=" + idCarro +
                 ", modelo='" + modelo + '\'' +
                 ", fabricante='" + fabricante + '\'' +
                 ", dataFabricacao=" + dataFabricacao +
