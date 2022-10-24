@@ -36,7 +36,8 @@ public class Passageiro {
         return suspenso;
     }
 
-    public void setSuspenso(boolean suspenso) {
+    public Passageiro setSuspenso(boolean suspenso) {
         this.suspenso = suspenso;
+        return this;
     }
 }

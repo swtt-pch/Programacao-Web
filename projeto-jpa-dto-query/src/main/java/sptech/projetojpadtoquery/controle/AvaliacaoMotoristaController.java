@@ -4,13 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sptech.projetojpadtoquery.dominio.AvaliacaoMotorista;
+import sptech.projetojpadtoquery.dominio.Motorista;
 import sptech.projetojpadtoquery.repositorio.AvaliacaoMotoristaRepository;
 import sptech.projetojpadtoquery.repositorio.MotoristaRepository;
 import sptech.projetojpadtoquery.repositorio.PassageiroRepository;
 import sptech.projetojpadtoquery.requisicao.NovaAvaliacaoRequest;
+import sptech.projetojpadtoquery.resposta.AvaliacaoMotoristaSimplesResponse;
 import sptech.projetojpadtoquery.resposta.ResumoAvaliacoesMotoristaResponse;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/avaliacoes/motoristas")
@@ -33,6 +38,28 @@ public class AvaliacaoMotoristaController {
     @GetMapping("/resumo/{idMotorista}")
     public ResponseEntity<ResumoAvaliacoesMotoristaResponse> getResumoAvaliacoes(@PathVariable int idMotorista) {
         return ResponseEntity.of(avaliacaoMotoristaRepository.getResumoAvaliacoesMotorista(idMotorista));
+    }
+
+    @GetMapping("/{idMotorista}")
+    public ResponseEntity<List<AvaliacaoMotorista>> getAvaliacaoMotorista(@PathVariable int idMotorista){
+        Optional<Motorista> optionalMotorista = motoristaRepository.findById(idMotorista);
+        if (!optionalMotorista.isPresent())
+            return ResponseEntity.status(404).build();
+        List<AvaliacaoMotorista> avaliacoes = avaliacaoMotoristaRepository.findByMotoristaId(idMotorista);
+        if (avaliacoes.isEmpty())
+            return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(avaliacoes);
+    }
+
+    @GetMapping("/{idMotorista}/simples")
+    public ResponseEntity<List<AvaliacaoMotoristaSimplesResponse>> getAvaliacaoMotoristaSimples(@PathVariable int idMotorista){
+        Optional<Motorista> optionalMotorista = motoristaRepository.findById(idMotorista);
+        if (!optionalMotorista.isPresent())
+            return ResponseEntity.status(404).build();
+        List<AvaliacaoMotoristaSimplesResponse> avaliacoes = avaliacaoMotoristaRepository.getAvaliacaoMotoristaSimples(idMotorista);
+        if (avaliacoes.isEmpty())
+            return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(avaliacoes);
     }
 
     @PostMapping

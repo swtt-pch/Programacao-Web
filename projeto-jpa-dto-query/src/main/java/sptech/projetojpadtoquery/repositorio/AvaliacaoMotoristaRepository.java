@@ -3,6 +3,7 @@ package sptech.projetojpadtoquery.repositorio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import sptech.projetojpadtoquery.dominio.AvaliacaoMotorista;
+import sptech.projetojpadtoquery.resposta.AvaliacaoMotoristaSimplesResponse;
 import sptech.projetojpadtoquery.resposta.ResumoAvaliacoesMotoristaResponse;
 
 import java.time.LocalDateTime;
@@ -33,5 +34,8 @@ public interface AvaliacaoMotoristaRepository extends JpaRepository<AvaliacaoMot
     List<AvaliacaoMotorista> findByMotoristaId(int idMotorista);
 
     List<AvaliacaoMotorista> findByPassageiroId(int idMotorista);
+
+    @Query("SELECT new sptech.projetojpadtoquery.resposta.AvaliacaoMotoristaSimplesResponse(am.dataHoraAvaliacao, am.nota, am.motorista.id, am.passageiro.id) FROM AvaliacaoMotorista am where am.motorista.id = ?1")
+    List<AvaliacaoMotoristaSimplesResponse> getAvaliacaoMotoristaSimples(int idMotorista);
 
 }
