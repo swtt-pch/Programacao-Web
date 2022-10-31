@@ -1,10 +1,14 @@
 package sptech.projetojpadtoquery.controle;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import sptech.projetojpadtoquery.dominio.AvaliacaoMotorista;
 import sptech.projetojpadtoquery.dominio.Motorista;
+import sptech.projetojpadtoquery.excecao.MotoristaNaoExisteException;
+import sptech.projetojpadtoquery.excecao.PassageiroNaoExisteException;
 import sptech.projetojpadtoquery.repositorio.AvaliacaoMotoristaRepository;
 import sptech.projetojpadtoquery.repositorio.MotoristaRepository;
 import sptech.projetojpadtoquery.repositorio.PassageiroRepository;
@@ -65,19 +69,19 @@ public class AvaliacaoMotoristaController {
     @PostMapping
     public ResponseEntity<AvaliacaoMotorista> post(@RequestBody @Valid NovaAvaliacaoRequest novaAvaliacaoRequest) {
 
-        if (!passageiroRepository.existsById(novaAvaliacaoRequest.getIdPassageiro())) {
-            return ResponseEntity.status(404).build();
-        }
-        if (!motoristaRepository.existsById(novaAvaliacaoRequest.getIdMotorista())) {
-            return ResponseEntity.status(404).build();
-        }
+//        if (!passageiroRepository.existsById(novaAvaliacaoRequest.getIdPassageiro())) {
+//            throw new PassageiroNaoExisteException();
+//        }
+//        if (!motoristaRepository.existsById(novaAvaliacaoRequest.getIdMotorista())) {
+//            throw new MotoristaNaoExisteException();
+//        }
 
         AvaliacaoMotorista novaAvaliacao = new AvaliacaoMotorista();
 
         novaAvaliacao.setPassageiro(
-                passageiroRepository.findById(novaAvaliacaoRequest.getIdPassageiro()).get());
+                passageiroRepository.findById(novaAvaliacaoRequest.getIdPassageiro()).orElseThrow(PassageiroNaoExisteException::new));
         novaAvaliacao.setMotorista(
-                motoristaRepository.findById(novaAvaliacaoRequest.getIdMotorista()).get());
+                motoristaRepository.findById(novaAvaliacaoRequest.getIdMotorista()).orElseThrow(MotoristaNaoExisteException::new));
 
         novaAvaliacao.setNota(novaAvaliacaoRequest.getNota());
 
