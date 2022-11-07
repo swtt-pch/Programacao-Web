@@ -20,7 +20,10 @@ public class PassageiroController {
 
     @GetMapping("/simples")
     public ResponseEntity<List<PassageiroSimplesResponse>> getSimples() {
-        return ResponseEntity.status(200).body(repository.getPassageirosSimples());
+        List<PassageiroSimplesResponse> passageiroSimplesResponses = repository.getPassageirosSimples();
+        if (passageiroSimplesResponses.isEmpty())
+            return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(passageiroSimplesResponses);
     }
 
     @DeleteMapping("/{idPassageiro}") @Transactional

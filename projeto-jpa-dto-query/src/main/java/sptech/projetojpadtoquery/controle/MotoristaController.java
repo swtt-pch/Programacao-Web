@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sptech.projetojpadtoquery.dominio.Motorista;
 import sptech.projetojpadtoquery.repositorio.MotoristaRepository;
 import sptech.projetojpadtoquery.resposta.MotoristaSimplesResponse;
 
@@ -17,10 +18,19 @@ public class MotoristaController {
     @Autowired
     private MotoristaRepository repository;
 
+    @GetMapping("")
+    public ResponseEntity<List<Motorista>> get(){
+        List<Motorista> motoristas = repository.findAll();
+        if (motoristas.isEmpty())
+            return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(motoristas);
+    }
+
     @GetMapping("/simples")
     public ResponseEntity<List<MotoristaSimplesResponse>> getSimples(){
-        return ResponseEntity.status(200).body(
-                repository.getMotoristaSimples()
-        );
+        List<MotoristaSimplesResponse> motoristaSimplesResponses = repository.getMotoristaSimples();
+        if (motoristaSimplesResponses.isEmpty())
+            return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(motoristaSimplesResponses);
     }
 }
