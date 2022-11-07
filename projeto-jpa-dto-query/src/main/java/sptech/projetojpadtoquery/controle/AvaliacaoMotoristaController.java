@@ -20,6 +20,7 @@ import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @RestController
 @RequestMapping("/avaliacoes/motoristas")
@@ -69,12 +70,12 @@ public class AvaliacaoMotoristaController {
     @PostMapping
     public ResponseEntity<AvaliacaoMotorista> post(@RequestBody @Valid NovaAvaliacaoRequest novaAvaliacaoRequest) {
 
-//        if (!passageiroRepository.existsById(novaAvaliacaoRequest.getIdPassageiro())) {
-//            throw new PassageiroNaoExisteException();
-//        }
-//        if (!motoristaRepository.existsById(novaAvaliacaoRequest.getIdMotorista())) {
-//            throw new MotoristaNaoExisteException();
-//        }
+       if (!passageiroRepository.existsById(novaAvaliacaoRequest.getIdPassageiro())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Passageiro não encontrado");
+       }
+       if (!motoristaRepository.existsById(novaAvaliacaoRequest.getIdMotorista())) {
+            throw new MotoristaNaoExisteException();
+       }
 
         AvaliacaoMotorista novaAvaliacao = new AvaliacaoMotorista();
 

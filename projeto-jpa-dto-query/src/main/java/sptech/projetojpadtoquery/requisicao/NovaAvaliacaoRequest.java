@@ -14,6 +14,15 @@ public class NovaAvaliacaoRequest {
     @Max(5)
     private int nota;
 
+    public NovaAvaliacaoRequest(int idPassageiro, int idMotorista, int nota) {
+        this.idPassageiro = idPassageiro;
+        this.idMotorista = idMotorista;
+        this.nota = nota;
+    }
+
+    public NovaAvaliacaoRequest() {
+    }
+
     public int getIdPassageiro() {
         return idPassageiro;
     }
