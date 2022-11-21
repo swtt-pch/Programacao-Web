@@ -3,9 +3,7 @@ package sptech.projetojpadtoquery.controle;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sptech.projetojpadtoquery.dominio.Motorista;
 import sptech.projetojpadtoquery.repositorio.MotoristaRepository;
 import sptech.projetojpadtoquery.resposta.MotoristaSimplesResponse;
@@ -32,5 +30,14 @@ public class MotoristaController {
         if (motoristaSimplesResponses.isEmpty())
             return ResponseEntity.status(204).build();
         return ResponseEntity.status(200).body(motoristaSimplesResponses);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id){
+        if (repository.existsById(id)){
+            repository.deleteById(id);
+            return ResponseEntity.status(200).build();
+        }
+        return ResponseEntity.status(404).build();
     }
 }

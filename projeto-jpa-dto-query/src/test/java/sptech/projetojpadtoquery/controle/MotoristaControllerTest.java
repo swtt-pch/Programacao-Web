@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(classes = MotoristaController.class)
 class MotoristaControllerTest {
     @Autowired
     private MotoristaController controller;
@@ -59,5 +59,13 @@ class MotoristaControllerTest {
         ResponseEntity<List<MotoristaSimplesResponse>> motoristas = controller.getSimples();
         assertEquals(204, motoristas.getStatusCodeValue());
         assertNull(motoristas.getBody());
+    }
+
+    @Test @DisplayName("delete() deve solicitar a exclusão se o id existir")
+    void delete1vez() {
+        int idTeste = 12;
+        when(repository.existsById(idTeste)).thenReturn(true);
+        controller.delete(idTeste);
+        verify(repository, times(1)).deleteById(idTeste);
     }
 }
