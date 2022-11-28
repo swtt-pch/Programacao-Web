@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Página de testes</title>
+    </head>
+    <body>
+        <h2>Pegando a imagem da API</h2>
+
+        Qual planta? <input id="in_id_planta" onkeyup="atualizar()"> <br>
+        <img id="img_planta" src="">
+
+    </body>
+</html>
+<script>
+    function atualizar() {
+        img_planta.src = `plantas/foto/${in_id_planta.value}`
+    }
+</script>
